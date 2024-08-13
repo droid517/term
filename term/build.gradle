@@ -106,8 +106,6 @@ dependencies {
 }
 
 tasks.register('elfcleaner', Exec) {
-    // only unix
-    commandLine 'sh', '-c', 'find build/*/stripped* -name lib*.so -print0 | xargs -0 -P 0 elf-cleaner'
 }
 
 tasks.configureEach { task ->
