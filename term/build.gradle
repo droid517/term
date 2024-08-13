@@ -104,12 +104,3 @@ dependencies {
     implementation libs.preference
     implementation libs.annotation
 }
-
-tasks.register('elfcleaner', Exec) {
-}
-
-tasks.configureEach { task ->
-    if (task.name.matches('strip.*DebugSymbols')) {
-        task.finalizedBy elfcleaner
-    }
-}
