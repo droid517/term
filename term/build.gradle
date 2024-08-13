@@ -37,13 +37,8 @@ android {
     }
     flavorDimensions = ["catalog"]
     productFlavors {
-        play {
-            // Google Play store
-            dimension 'catalog'
-        }
         full {
             dimension 'catalog'
-            versionName android.defaultConfig.versionName + "/X"
         }
     }
     if (project.hasProperty("signing.properties")) {
