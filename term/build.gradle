@@ -35,46 +35,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    flavorDimensions = ["catalog"]
-    productFlavors {
-        play {
-            // Google Play store
-            dimension 'catalog'
-        }
-        full {
-            dimension 'catalog'
-            versionName android.defaultConfig.versionName + "/X"
-        }
-    }
-    if (project.hasProperty("signing.properties")) {
-
-        Properties properties = new Properties()
-        properties.load(new FileInputStream(file(project.property("signing.properties"))))
-
-        signingConfigs {
-            release {
-                storeFile file(properties["store.file"])
-                storePassword properties["store.password"]
-                keyAlias properties["key.alias"]
-                keyPassword properties["key.password"]
-            }
-        }
-
-        android.buildTypes.release.signingConfig = signingConfigs.release
-    }
     buildTypes {
-        debug {
-            applicationIdSuffix ".devel"
-
-            // NOTE: used in third party development applications
-            manifestPlaceholders.applicationIdSuffix = "${applicationIdSuffix}"
-            buildConfigField("String", "APPLICATION_ID_SUFFIX", "\"${applicationIdSuffix}\"")
-            externalNativeBuild {
-                cmake {
-                    arguments "-DAPPLICATION_ID:STRING=${defaultConfig.applicationId}${applicationIdSuffix}"
-                }
-            }
-        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
@@ -103,15 +64,4 @@ dependencies {
     implementation libs.material
     implementation libs.preference
     implementation libs.annotation
-}
-
-tasks.register('elfcleaner', Exec) {
-    // only unix
-    commandLine 'sh', '-c', 'find build/*/stripped* -name lib*.so -print0 | xargs -0 -P 0 elf-cleaner'
-}
-
-tasks.configureEach { task ->
-    if (task.name.matches('strip.*DebugSymbols')) {
-        task.finalizedBy elfcleaner
-    }
 }
